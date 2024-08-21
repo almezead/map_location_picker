@@ -475,12 +475,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
               },
               onMapCreated: (GoogleMapController controller) =>
                   _controller.complete(controller),
-              markers: {
-                Marker(
-                  markerId: const MarkerId('one'),
-                  position: _initialPosition,
-                ),
-              },
+              markers: markers,
               myLocationButtonEnabled: false,
               myLocationEnabled: true,
               zoomControlsEnabled: false,
