@@ -170,7 +170,7 @@ class MapLocationPicker extends StatefulWidget {
   final TextEditingController? searchController;
 
   /// Add your own custom markers
-  final Map<String, LatLng>? additionalMarkers;
+  final List<Marker>? additionalMarkers;
 
   /// Safe area parameters (default: true)
   final bool bottom;
@@ -426,16 +426,8 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final additionalMarkers = widget.additionalMarkers?.entries
-            .map(
-              (e) => Marker(
-                markerId: MarkerId(e.key),
-                position: e.value,
-              ),
-            )
-            .toList() ??
-        [];
 
+    final additionalMarkers = widget.additionalMarkers ?? [];
     final markers = Set<Marker>.from(additionalMarkers);
     markers.add(
       Marker(
@@ -443,6 +435,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
         position: _initialPosition,
       ),
     );
+    
     return PopScope(
       canPop: Navigator.of(context).userGestureInProgress,
       child: Scaffold(
