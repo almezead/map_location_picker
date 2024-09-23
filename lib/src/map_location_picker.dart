@@ -91,6 +91,8 @@ class MapLocationPicker extends StatefulWidget {
   /// When tap on map decode address callback function
   final Function(GeocodingResult?)? onDecodeAddress;
 
+  final Function(LatLngBounds?)? onCameraIdleInfo;
+
   /// Show back button (default: true)
   final bool hideBackButton;
 
@@ -365,6 +367,7 @@ class MapLocationPicker extends StatefulWidget {
     this.hideMapTypeButton = false,
     this.hideBottomCard = false,
     this.onDecodeAddress,
+    this.onCameraIdleInfo,
     this.focusNode,
     this.mapStyle,
     this.fabTooltip = 'My Location',
@@ -448,6 +451,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                 /// set zoom level
                 _zoom = position.zoom;
               },
+            
               initialCameraPosition: CameraPosition(
                 target: _initialPosition,
                 zoom: _zoom,
@@ -458,6 +462,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                 controller.animateCamera(
                   CameraUpdate.newCameraPosition(cameraPosition()),
                 );
+                
                 _decodeAddress(
                   Location(
                     lat: position.latitude,
@@ -487,7 +492,11 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
               indoorViewEnabled: widget.indoorViewEnabled,
               layoutDirection: widget.layoutDirection,
               mapToolbarEnabled: widget.mapToolbarEnabled,
-              onCameraIdle: widget.onCameraIdle,
+              onCameraIdle: () async {
+                final controller = await _controller.future;
+                final isibleRegion = await controller.getVisibleRegion();
+                 widget.onCameraIdleInfo?.call(isibleRegion);
+              },
               onCameraMoveStarted: widget.onCameraMoveStarted,
               onLongPress: widget.onLongPress,
               polygons: widget.polygons,
@@ -702,12 +711,9 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                                         children:
                                             _geocodingResultList.map((element) {
                                           return ListTile(
-                                            title: Text(
-                                                element.formattedAddress ?? ""),
+                                            title: Text(element.formattedAddress ?? ""),
                                             onTap: () {
-                                              _address =
-                                                  element.formattedAddress ??
-                                                      "";
+                                              _address = element.formattedAddress ?? "";
                                               _geocodingResult = element;
                                               setState(() {});
                                               Navigator.pop(context, element);

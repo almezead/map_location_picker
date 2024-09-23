@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 
-import 'key.dart';
+
 
 void main() {
   runApp(
@@ -132,6 +132,7 @@ class _MyAppState extends State<MyApp> {
                             });
                           }
                         },
+                      
                         onSuggestionSelected: (PlacesDetailsResponse? result) {
                           if (result != null) {
                             setState(() {
