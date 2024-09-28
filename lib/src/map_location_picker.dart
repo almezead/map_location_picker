@@ -451,7 +451,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                 /// set zoom level
                 _zoom = position.zoom;
               },
-            
+              
               initialCameraPosition: CameraPosition(
                 target: _initialPosition,
                 zoom: _zoom,
@@ -494,8 +494,8 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
               mapToolbarEnabled: widget.mapToolbarEnabled,
               onCameraIdle: () async {
                 final controller = await _controller.future;
-                final isibleRegion = await controller.getVisibleRegion();
-                 widget.onCameraIdleInfo?.call(isibleRegion);
+                final visibleRegion = await controller.getVisibleRegion();
+                 widget.onCameraIdleInfo?.call(visibleRegion);
               },
               onCameraMoveStarted: widget.onCameraMoveStarted,
               onLongPress: widget.onLongPress,
