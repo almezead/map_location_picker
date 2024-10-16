@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -296,6 +297,8 @@ class MapLocationPicker extends StatefulWidget {
 
   final InputDecoration? decoration;
 
+  final void Function(GoogleMapController)? onMapCreated;
+
   final Widget? Function(
     BuildContext context,
     GeocodingResult? result,
@@ -396,6 +399,7 @@ class MapLocationPicker extends StatefulWidget {
     this.zoomGesturesEnabled = true,
     this.decoration,
     this.bottomCardBuilder,
+    this.onMapCreated
   });
 
   @override
@@ -471,8 +475,10 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                 );
                 setState(() {});
               },
-              onMapCreated: (GoogleMapController controller) =>
-                  _controller.complete(controller),
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+                widget.onMapCreated?.call(controller);
+              },
               markers: markers,
               myLocationButtonEnabled: false,
               myLocationEnabled: true,
