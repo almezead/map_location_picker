@@ -460,7 +460,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                 zoom: _zoom,
               ),
               onTap: (LatLng position) async {
-                _initialPosition = position;
+               /* _initialPosition = position;
                 final controller = await _controller.future;
                 controller.animateCamera(
                   CameraUpdate.newCameraPosition(cameraPosition()),
@@ -472,7 +472,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                     lng: position.longitude,
                   ),
                 );
-                setState(() {});
+                setState(() {});*/
               },
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
@@ -500,7 +500,17 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
               onCameraIdle: () async {
                 final controller = await _controller.future;
                 final visibleRegion = await controller.getVisibleRegion();
-                 widget.onCameraIdleInfo?.call(visibleRegion);
+
+                _initialPosition = visibleRegion.center;
+                _decodeAddress(
+                  Location(
+                    lat: visibleRegion.center.latitude,
+                    lng: visibleRegion.center.longitude,
+                  ),
+                );
+                setState(() {});
+
+                widget.onCameraIdleInfo?.call(visibleRegion);
               },
               onCameraMoveStarted: widget.onCameraMoveStarted,
               onLongPress: widget.onLongPress,
@@ -823,5 +833,13 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
     } catch (e) {
       logger.e(e);
     }
+  }
+}
+
+
+extension LatLngBoundsX on LatLngBounds {
+  LatLng get center {
+    return LatLng((southwest.latitude + northeast.latitude) / 2,
+        (southwest.longitude + northeast.longitude) / 2);
   }
 }
