@@ -460,7 +460,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                 zoom: _zoom,
               ),
               onTap: (LatLng position) async {
-               /* _initialPosition = position;
+                _initialPosition = position;
                 final controller = await _controller.future;
                 controller.animateCamera(
                   CameraUpdate.newCameraPosition(cameraPosition()),
@@ -472,7 +472,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                     lng: position.longitude,
                   ),
                 );
-                setState(() {});*/
+                setState(() {});
               },
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
