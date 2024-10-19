@@ -294,6 +294,8 @@ class MapLocationPicker extends StatefulWidget {
   /// True if the map view should respond to zoom gestures.
   final bool zoomGesturesEnabled;
 
+  final bool moveLocationMarkerOnCameraIdle;
+
   final InputDecoration? decoration;
 
   final void Function(GoogleMapController)? onMapCreated;
@@ -398,7 +400,8 @@ class MapLocationPicker extends StatefulWidget {
     this.zoomGesturesEnabled = true,
     this.decoration,
     this.bottomCardBuilder,
-    this.onMapCreated
+    this.onMapCreated,
+    this.moveLocationMarkerOnCameraIdle = false
   });
 
   @override
@@ -500,15 +503,16 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
               onCameraIdle: () async {
                 final controller = await _controller.future;
                 final visibleRegion = await controller.getVisibleRegion();
-
-                _initialPosition = visibleRegion.center;
-                _decodeAddress(
-                  Location(
-                    lat: visibleRegion.center.latitude,
-                    lng: visibleRegion.center.longitude,
-                  ),
-                );
-                setState(() {});
+                if (widget.moveLocationMarkerOnCameraIdle) {
+                  _initialPosition = visibleRegion.center;
+                  _decodeAddress(
+                    Location(
+                      lat: visibleRegion.center.latitude,
+                      lng: visibleRegion.center.longitude,
+                    ),
+                  );
+                  setState(() {});
+                }
 
                 widget.onCameraIdleInfo?.call(visibleRegion);
               },
