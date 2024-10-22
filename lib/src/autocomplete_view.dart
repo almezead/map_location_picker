@@ -367,6 +367,7 @@ class PlacesAutocomplete extends StatelessWidget {
         margin: topCardMargin,
         shape: topCardShape,
         color: topCardColor,
+        elevation: 0,
         child: ListTile(
           minVerticalPadding: 0,
           contentPadding: const EdgeInsets.only(right: 4, left: 4),
