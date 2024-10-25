@@ -461,6 +461,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
               initialCameraPosition: CameraPosition(
                 target: _initialPosition,
                 zoom: _zoom,
+                tilt: -180
               ),
               onTap: (LatLng position) async {
                 _initialPosition = position;
@@ -773,6 +774,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
     return CameraPosition(
       target: _initialPosition,
       zoom: _zoom,
+      tilt: -180
     );
   }
 
